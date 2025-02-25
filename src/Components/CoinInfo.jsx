@@ -27,13 +27,14 @@ import {
   Image,
 } from "@chakra-ui/react";
 import { useColorModeValue } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 function CoinInfo({ coinId }) {
   const [coinData, setCoinData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const colorMode = useSelector((state) => state.theme.colorMode);
+  const currencySelected = useSelector((state) => state.currency.currency);
 
   useEffect(() => {
     const fetchCoinData = async () => {
@@ -105,14 +106,33 @@ function CoinInfo({ coinId }) {
     switch (activeTab) {
       case "overview":
         return (
-          <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={6}>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+          <Grid templateColumns="repeat(auto-fill, minmax(400px, 1fr))" gap={6}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <DollarSign color="#3182ce" size={24} />
                 <Heading size="md">Current Price</Heading>
               </HStack>
               <Text fontSize="3xl" fontWeight="bold">
-                ${formatNumber(coinData.market_data.current_price.usd)}
+                {currencySelected === "INR" ? (
+                  <>
+                    ₹{" "}
+                    {coinData.market_data.current_price.inr.toLocaleString(
+                      "en-IN"
+                    )}
+                  </>
+                ) : (
+                  <>
+                    ${" "}
+                    {coinData.market_data.current_price.usd.toLocaleString(
+                      "en-US"
+                    )}
+                  </>
+                )}
               </Text>
               <Text
                 mt={2}
@@ -126,34 +146,81 @@ function CoinInfo({ coinId }) {
                 (24h)
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <TrendingUp color="#3182ce" size={24} />
                 <Heading size="md">Market Cap</Heading>
               </HStack>
               <Text fontSize="3xl" fontWeight="bold">
-                ${formatNumber(coinData.market_data.market_cap.usd)}
+                {currencySelected === "INR" ? (
+                  <>
+                    ₹{" "}
+                    {coinData.market_data.market_cap.inr.toLocaleString(
+                      "en-IN"
+                    )}
+                  </>
+                ) : (
+                  <>
+                    ${" "}
+                    {coinData.market_data.market_cap.usd.toLocaleString(
+                      "en-US"
+                    )}
+                  </>
+                )}
               </Text>
               <Text mt={2} color="gray.500">
                 Rank #{coinData.market_cap_rank}
               </Text>
               <Text mt={2} color="gray.500">
-                Market Cap Change: {coinData.market_data.market_cap_change_percentage_24h.toFixed(2)}%
+                Market Cap Change:{" "}
+                {coinData.market_data.market_cap_change_percentage_24h.toFixed(
+                  2
+                )}
+                %
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <CircleDollarSign color="#3182ce" size={24} />
                 <Heading size="md">Trading Volume</Heading>
               </HStack>
               <Text fontSize="3xl" fontWeight="bold">
-                ${formatNumber(coinData.market_data.total_volume.usd)}
+                {currencySelected === "INR" ? (
+                  <>
+                    ₹{" "}
+                    {coinData.market_data.total_volume.inr.toLocaleString(
+                      "en-IN"
+                    )}
+                  </>
+                ) : (
+                  <>
+                    ${" "}
+                    {coinData.market_data.total_volume.usd.toLocaleString(
+                      "en-US"
+                    )}
+                  </>
+                )}
               </Text>
               <Text mt={2} color="gray.500">
                 24h Volume
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <Clock color="#3182ce" size={24} />
                 <Heading size="md">Last Updated</Heading>
@@ -162,7 +229,12 @@ function CoinInfo({ coinId }) {
                 {formatDate(coinData.last_updated)}
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <Heading size="md">Total Supply</Heading>
               </HStack>
@@ -172,27 +244,66 @@ function CoinInfo({ coinId }) {
                   : "N/A"}
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <Heading size="md">7d Change</Heading>
               </HStack>
-              <Text fontSize="lg" fontWeight="medium" color={coinData.market_data.price_change_percentage_7d >= 0 ? "green.500" : "red.500"}>
+              <Text
+                fontSize="lg"
+                fontWeight="medium"
+                color={
+                  coinData.market_data.price_change_percentage_7d >= 0
+                    ? "green.500"
+                    : "red.500"
+                }
+              >
                 {coinData.market_data.price_change_percentage_7d.toFixed(2)}%
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <Heading size="md">30d Change</Heading>
               </HStack>
-              <Text fontSize="lg" fontWeight="medium" color={coinData.market_data.price_change_percentage_30d >= 0 ? "green.500" : "red.500"}>
+              <Text
+                fontSize="lg"
+                fontWeight="medium"
+                color={
+                  coinData.market_data.price_change_percentage_30d >= 0
+                    ? "green.500"
+                    : "red.500"
+                }
+              >
                 {coinData.market_data.price_change_percentage_30d.toFixed(2)}%
               </Text>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <HStack spacing={3} mb={4}>
                 <Heading size="md">1y Change</Heading>
               </HStack>
-              <Text fontSize="lg" fontWeight="medium" color={coinData.market_data.price_change_percentage_1y >= 0 ? "green.500" : "red.500"}>
+              <Text
+                fontSize="lg"
+                fontWeight="medium"
+                color={
+                  coinData.market_data.price_change_percentage_1y >= 0
+                    ? "green.500"
+                    : "red.500"
+                }
+              >
                 {coinData.market_data.price_change_percentage_1y.toFixed(2)}%
               </Text>
             </Box>
@@ -201,7 +312,12 @@ function CoinInfo({ coinId }) {
       case "market":
         return (
           <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={6}>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <Heading size="md" mb={4}>
                 Price Statistics
               </Heading>
@@ -209,7 +325,15 @@ function CoinInfo({ coinId }) {
                 <HStack justify="space-between">
                   <Text color="gray.600">All Time High</Text>
                   <Text fontWeight="medium">
-                    ${formatNumber(coinData.market_data.ath.usd)}
+                    {currencySelected === "INR" ? (
+                      <>
+                        ₹ {coinData.market_data.ath.inr.toLocaleString("en-IN")}
+                      </>
+                    ) : (
+                      <>
+                        $ {coinData.market_data.ath.usd.toLocaleString("en-US")}
+                      </>
+                    )}
                   </Text>
                 </HStack>
                 <HStack justify="space-between">
@@ -218,12 +342,12 @@ function CoinInfo({ coinId }) {
                     {formatDate(coinData.market_data.ath_date.usd)}
                   </Text>
                 </HStack>
-                <HStack justify="space-between">
+                {/* <HStack justify="space-between">
                   <Text color="gray.600">All Time Low</Text>
                   <Text fontWeight="medium">
                     ${formatNumber(coinData.market_data.atl.usd)}
                   </Text>
-                </HStack>
+                </HStack> */}
                 <HStack justify="space-between">
                   <Text color="gray.600">Circulating Supply</Text>
                   <Text fontWeight="medium">
@@ -241,7 +365,12 @@ function CoinInfo({ coinId }) {
                 </HStack>
               </Stack>
             </Box>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <Heading size="md" mb={4}>
                 Price Changes
               </Heading>
@@ -266,12 +395,20 @@ function CoinInfo({ coinId }) {
         );
       case "info":
         return (
-          <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+          <Box
+            p={6}
+            borderRadius="lg"
+            boxShadow="md"
+            bg={useColorModeValue("white", "gray.700")}
+          >
             <Flex align="center" mb={6}>
-              <Image src={coinData.image.large} alt={coinData.name} boxSize="50px" mr={4} />
-              <Heading size="lg">
-                About {coinData.name}
-              </Heading>
+              <Image
+                src={coinData.image.large}
+                alt={coinData.name}
+                boxSize="50px"
+                mr={4}
+              />
+              <Heading size="lg">About {coinData.name}</Heading>
             </Flex>
             <Text color="gray.700" mb={6}>
               {coinData.description.en}
@@ -328,7 +465,12 @@ function CoinInfo({ coinId }) {
       case "social":
         return (
           <Grid templateColumns="repeat(auto-fill, minmax(300px, 1fr))" gap={6}>
-            <Box p={6} borderRadius="lg" boxShadow="md" bg={useColorModeValue("white", "gray.700")}>
+            <Box
+              p={6}
+              borderRadius="lg"
+              boxShadow="md"
+              bg={useColorModeValue("white", "gray.700")}
+            >
               <Heading size="md" mb={4}>
                 Community
               </Heading>
@@ -384,7 +526,12 @@ function CoinInfo({ coinId }) {
     <Box minHeight="100vh" p={6} bg={useColorModeValue("gray.50", "gray.800")}>
       <Flex justify="space-between" align="center" mb={6}>
         <Flex align="center">
-          <Image src={coinData.image.large} alt={coinData.name} boxSize="50px" mr={4} />
+          <Image
+            src={coinData.image.large}
+            alt={coinData.name}
+            boxSize="50px"
+            mr={4}
+          />
           <Heading size="2xl" color={useColorModeValue("gray.800", "white")}>
             {coinData.name} ({coinData.symbol.toUpperCase()})
           </Heading>

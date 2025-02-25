@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
-import { Line } from "react-chartjs-2";
+// import axios from "axios";
+// import { Line } from "react-chartjs-2";
 import {
   Box,
   Button,
@@ -9,62 +9,62 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-} from "chart.js";
+// import {
+//   Chart as ChartJS,
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend,
+// } from "chart.js";
 import NavBar from "./NavBar";
 import CoinInfo from "./CoinInfo";
 
 // Register chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+// ChartJS.register(
+//   CategoryScale,
+//   LinearScale,
+//   PointElement,
+//   LineElement,
+//   Title,
+//   Tooltip,
+//   Legend
+// );
 
-const HistoricalChart = (id, days, currency) => {
-  return `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
-};
+// const HistoricalChart = (id, days, currency) => {
+//   return `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
+// };
 
-export const chartDays = [
-  { label: "24 Hours", value: 1 },
-  { label: "30 Days", value: 30 },
-  { label: "3 Months", value: 90 },
-  { label: "1 Year", value: 365 },
-];
+// export const chartDays = [
+//   { label: "24 Hours", value: 1 },
+//   { label: "30 Days", value: 30 },
+//   { label: "3 Months", value: 90 },
+//   { label: "1 Year", value: 365 },
+// ];
 
-const SelectButton = ({ children, selected, onClick }) => {
-  return (
-    <Button
-      onClick={onClick}
-      variant="outline"
-      borderColor={selected ? "gold" : "gray.400"}
-      bg={selected ? "gold" : "transparent"}
-      color={selected ? "black" : useColorModeValue("gray.600", "white")}
-      fontWeight={selected ? "bold" : "normal"}
-      _hover={{
-        bg: "gold",
-        color: "black",
-      }}
-      borderRadius="md"
-      p={4}
-      w="22%"
-    >
-      {children}
-    </Button>
-  );
-};
+// const SelectButton = ({ children, selected, onClick }) => {
+//   return (
+//     <Button
+//       onClick={onClick}
+//       variant="outline"
+//       borderColor={selected ? "gold" : "gray.400"}
+//       bg={selected ? "gold" : "transparent"}
+//       color={selected ? "black" : useColorModeValue("gray.600", "white")}
+//       fontWeight={selected ? "bold" : "normal"}
+//       _hover={{
+//         bg: "gold",
+//         color: "black",
+//       }}
+//       borderRadius="md"
+//       p={4}
+//       w="22%"
+//     >
+//       {children}
+//     </Button>
+//   );
+// };
 
 function CoinDetails() {
   const { id } = useParams();
@@ -127,7 +127,7 @@ function CoinDetails() {
       <Box pt={32}></Box>
       <CoinInfo coinId={id} />
 
-      <Box w="75%" mx="auto" pt={300} textAlign="center">
+      {/* <Box w="75%" mx="auto" pt={300} textAlign="center">
         {!historicData || loading ? (
           <Spinner size="xl" thickness="4px" color="gold" />
         ) : (
@@ -191,7 +191,7 @@ function CoinDetails() {
             </Box>
           </>
         )}
-      </Box>
+      </Box> */}
     </>
   );
 }
